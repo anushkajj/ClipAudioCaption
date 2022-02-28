@@ -46,7 +46,7 @@ def main(clip_model_type: str):
             print('ERROR IN:', filename)
         logmel = logmel.astype(np.uint8)
         # image = io.imread(logmel)
-        image = preprocess(Image.fromarray(image)).unsqueeze(0).to(device)
+        image = preprocess(Image.fromarray(logmel)).unsqueeze(0).to(device)
         # image = preprocess(Image.fromarray(logmel)).unsqueeze(0)
         with torch.no_grad():
             prefix = clip_model.encode_image(image).cpu()
