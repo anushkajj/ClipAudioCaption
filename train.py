@@ -59,6 +59,7 @@ class ClipCocoDataset(Dataset):
         captions_raw = all_data["captions"]
         self.image_ids = [caption["file_name"] for caption in captions_raw]
         self.captions = [caption['caption_1'] for caption in captions_raw]
+        print(self.captions)
         if os.path.isfile(f"{data_path[:-4]}_tokens.pkl"):
             with open(f"{data_path[:-4]}_tokens.pkl", 'rb') as f:
                 self.captions_tokens, self.caption2embedding, self.max_seq_len = pickle.load(f)
@@ -74,7 +75,8 @@ class ClipCocoDataset(Dataset):
             with open(f"{data_path[:-4]}_tokens.pkl", 'wb') as f:
                 pickle.dump([self.captions_tokens, self.caption2embedding, max_seq_len], f)
         all_len = torch.tensor([len(self.captions_tokens[i]) for i in range(len(self))]).float()
-        self.max_seq_len = min(int(all_len.mean() + all_len.std() * 10), int(all_len.max()))
+
+        self.max_seq_len = min(int(all_len.mean() + all_len.std(unbiased=False) * 10), int(all_len.max()))
 
 
 class MLP(nn.Module):

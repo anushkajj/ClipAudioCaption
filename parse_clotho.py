@@ -14,7 +14,12 @@ import pandas as pd
 
 def main(clip_model_type: str):
     device = torch.device('cuda:0')
+    # device = 'cpu'
     clip_model_name = clip_model_type.replace('/', '_')
+    path = os.path.join("./data", "clotho")
+    if not os.path.exists(path):
+        os.makedirs(path)
+
     out_path = f"./data/clotho/oscar_split_{clip_model_name}_train.pkl"
     clip_model, preprocess = clip.load(clip_model_type, jit=False)
 
@@ -50,9 +55,9 @@ def main(clip_model_type: str):
         # image = preprocess(Image.fromarray(logmel)).unsqueeze(0)
         with torch.no_grad():
             prefix = clip_model.encode_image(image).cpu()
-        data["clip_embedding"] = index
+        row["clip_embedding"] = index
         all_embeddings.append(prefix)
-        all_captions.append(data)
+        all_captions.append(row)
         if (index + 1) % 10000 == 0:
             with open(out_path, 'wb') as f:
                 pickle.dump({"clip_embedding": torch.cat(all_embeddings, dim=0), "captions": all_captions}, f)

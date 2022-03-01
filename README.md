@@ -18,7 +18,7 @@ conda activate clip_prefix_caption
 
 ## Clotho training
 
-Download [train_audio and captions](https://zenodo.org/record/3490684#.Yhtnve5Bw-Q) to `data`.
+Download [train_audio and captions](https://zenodo.org/record/3490684#.Yhtnve5Bw-Q) to `data` folder.
 
 Download model weights to root directory
 ```
